@@ -16,15 +16,15 @@ REST API for the Bhagavad Gita, providing access to verses in Sanskrit, translit
 
 ### Health Check
 
-'''
+```
 GET /api/health
-'''
+```
 
 ### Get Chapter
 
-\`\`\`
+```
 GET /api/gita/chapter/{chapter_number}
-\`\`\`
+```
 
 ### Get Verse
 
