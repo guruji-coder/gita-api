@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bhagavad Gita API Tester</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bhagavad Gita API Tester</h1>
+
+      <section class="api-test">
+        <h2>Health Check</h2>
+        <button onclick="testEndpoint('/api/health')">Test Health</button>
+        <pre id="health-result" class="result"></pre>
+      </section>
+
+      <section class="api-test">
+        <h2>Get Chapter</h2>
+        <div class="input-group">
+          <label for="chapter-num">Chapter Number (1-18):</label>
+          <input type="number" id="chapter-num" min="1" max="18" value="1" />
+          <button onclick="getChapter()">Get Chapter</button>
+        </div>
+        <pre id="chapter-result" class="result"></pre>
+      </section>
+
+      <section class="api-test">
+        <h2>Get Verse</h2>
+        <div class="input-group">
+          <label for="verse-chapter">Chapter:</label>
+          <input type="number" id="verse-chapter" min="1" max="18" value="1" />
+          <label for="verse-num">Verse:</label>
+          <input type="text" id="verse-num" value="1" />
+          <button onclick="getVerse()">Get Verse</button>
+        </div>
+        <pre id="verse-result" class="result"></pre>
+      </section>
+    </div>
+
+    <script>
+      const API_BASE = window.location.origin;
+
+      async function testEndpoint(endpoint) {
+        const resultElement = document.getElementById("health-result");
+        try {
+          const response = await fetch(API_BASE + endpoint);
+          const data = await response.json();
+          resultElement.textContent = JSON.stringify(data, null, 2);
+          resultElement.classList.add("success");
+        } catch (error) {
+          resultElement.textContent = `Error: ${error.message}`;
+          resultElement.classList.add("error");
+        }
+      }
+
+      async function getChapter() {
+        const chapterNum = document.getElementById("chapter-num").value;
+        const resultElement = document.getElementById("chapter-result");
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/gita/chapter/${chapterNum}`
+          );
+          const data = await response.json();
+          resultElement.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          resultElement.textContent = `Error: ${error.message}`;
+        }
+      }
+
+      async function getVerse() {
+        const chapterNum = document.getElementById("verse-chapter").value;
+        const verseNum = document.getElementById("verse-num").value;
+        const resultElement = document.getElementById("verse-result");
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/gita/verse/${chapterNum}/${verseNum}`
+          );
+          const data = await response.json();
+          resultElement.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          resultElement.textContent = `Error: ${error.message}`;
+        }
+      }
+    </script>
+  </body>
+</html>
